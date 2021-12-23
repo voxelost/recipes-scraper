@@ -5,13 +5,15 @@ from random import randint
 
 if __name__ == '__main__':
     resp = requests.post(
-        'https://d1.supercook.com/dyn/lang_ings', data={'lang': 'pl'})
+        'https://d1.supercook.com/dyn/lang_ings', data={
+            'lang': 'pl'
+        })
 
     # this gives an array of groups that contain a name and a list of ingredients
     ingredient_groups = json.loads(resp.content)
 
     owned_ingredients = [i for j
-                         in ingredient_groups for i in j['ingredients'] if randint(0, 9) <= 2]  # if randint(0, 20) == 20
+                         in ingredient_groups for i in j['ingredients'] if randint(0, 9) <= 2]
 
     results_req = requests.post('https://d1.supercook.com/dyn/results', headers={
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -38,7 +40,6 @@ if __name__ == '__main__':
     })
 
     details = json.loads(details_req.content)
-    recipe_hash = details['recipe']['hash']
 
     scraped = scrape_me(details['recipe']['hash'], wild_mode=True)
 
